@@ -11,3 +11,10 @@ Route::get('/about-us', function () {
 Route::get('/products', function () {
     return view('Frontend.Pages.Product');
 });
+
+
+Route::get('/login', function() {
+    return view('Admin.auth.Login');
+});
+
+// Route::get('admin', [AdminHome])
