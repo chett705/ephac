@@ -138,7 +138,7 @@
                 </h2>
 
                 <div class="flex flex-wrap justify-center items-start gap-y-12 mb-20">
-                    @foreach([2020, 2025, 2025, 2025] as $year)
+                    @foreach([2003, 2005, 2010, 2015] as $year)
                     <div class="flex-1 min-w-[200px] text-center group">
                         <div class="flex items-center justify-center mb-6">
                             <span class="text-red-500 text-5xl font-light px-4">{{ $year }}</span>

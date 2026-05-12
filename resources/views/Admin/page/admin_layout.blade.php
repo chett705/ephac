@@ -54,9 +54,9 @@
       </a>
 
       <!-- Product Page -->
-      <a href="" 
+      <a href="{{ route('admin.products.index') }}" 
          class="flex items-center gap-3 px-5 py-3 text-slate-300 hover:bg-slate-800 hover:text-white rounded-2xl transition-all 
-                {{ request()->routeIs('admin.product.cms') ? 'bg-slate-800 text-white' : '' }}">
+                {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product_categories.*') || request()->routeIs('admin.product_subcategories.*') ? 'bg-slate-800 text-white' : '' }}">
         <i class="fa-solid fa-box text-xl w-6"></i>
         <span class="font-medium">Product Page</span>
       </a>
@@ -83,6 +83,8 @@
   </div>
 
 </div>
+
+@stack('scripts')
 
 </body>
 </html>
