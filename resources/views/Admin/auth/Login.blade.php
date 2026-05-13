@@ -3,20 +3,20 @@
 
 
 
-<div class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+<div class="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-6 sm:py-10">
     
-    <div class="w-full max-w-md bg-white shadow-2xl rounded-3xl overflow-hidden">
+    <div class="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl">
 
         {{-- Top Section --}}
-        <div class="bg-blue-600 text-white text-center py-8 px-6">
-            <h1 class="text-3xl font-bold"> EPHAC Admin</h1>
+        <div class="bg-blue-600 px-5 py-7 text-center text-white sm:px-6 sm:py-8">
+            <h1 class="text-2xl font-bold sm:text-3xl">EPHAC Admin</h1>
             <p class="mt-2 text-sm text-blue-100">
               
             </p>
         </div>
 
         {{-- Form Section --}}
-        <div class="p-8">
+        <div class="p-5 sm:p-8">
 
             {{-- Success Message --}}
             @if(session('success'))

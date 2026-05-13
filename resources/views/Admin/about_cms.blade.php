@@ -1,7 +1,7 @@
 @extends('Admin.page.admin_layout')
 
 @section('content')
-    <div class="max-w-5xl mx-auto space-y-12 pb-20">
+    <div class="mx-auto max-w-5xl space-y-8 pb-12 sm:space-y-12 sm:pb-20">
 
         {{-- Notification Messages --}}
         @if (session('success'))
@@ -36,11 +36,11 @@
         @endif
 
         {{-- HERO SECTION --}}
-        <section id="hero" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <section id="hero" class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
                 <h3 class="text-lg font-bold text-gray-800">Hero Section Management</h3>
             </div>
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <form action="{{ route('admin.about.hero.update') }}" method="POST"
                     class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @csrf
@@ -64,9 +64,9 @@
                         <textarea name="description" rows="3"
                             class="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500">{{ $hero->description ?? '' }}</textarea>
                     </div>
-                    <div class="flex justify-end md:col-span-2">
+                    <div class="flex justify-stretch md:col-span-2 md:justify-end">
                         <button type="submit"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            class="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 md:w-auto">
                             Update Hero
                         </button>
                     </div>

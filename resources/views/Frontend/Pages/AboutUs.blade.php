@@ -5,9 +5,10 @@
 <div class="relative mx-auto max-w-7xl">
 
     {{-- HERO --}}
-    <section class="relative overflow-hidden rounded-[45px] bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] shadow-[0_20px_50px_rgba(30,76,161,0.15)] h-[620px] lg:h-[720px]">
+    <div class ="bg-gradient-to-br rounded-t-[40px] from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff]">
+        <section class="relative overflow-hidden rounded-[20px] bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] shadow-[0_20px_50px_rgba(30,76,161,0.15)] h-[620px] lg:h-[720px]">
 
-        <div class="absolute inset-0 overflow-hidden rounded-[45px]">
+        <div class="absolute inset-0 overflow-hidden rounded-[20px]">
             <iframe
                 width="100%"
                 height="100%"
@@ -51,7 +52,7 @@
     </section>
 
     {{-- VISION & MISSION + STRENGTHS --}}
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] py-16">
+    <section class="relative overflow-hidden  py-16 ">
         <div class="max-w-7xl mx-auto px-6">
 
             <!-- Vision & Mission Cards -->
@@ -128,6 +129,8 @@
 
         </div>
     </section>
+    </div>
+    
 
     <div class="bg-white font-sans text-[#222]">
 

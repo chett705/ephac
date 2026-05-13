@@ -59,85 +59,102 @@
         </div>
 
         <div class="relative mx-auto max-w-7xl">
-            {{-- HERO SECTION (Dynamic) --}}
-            <section class="relative overflow-hidden rounded-[45px] bg-black h-[620px] lg:h-[720px] shadow-2xl">
-                <div class="absolute inset-0">
-                    @if ($hero && $hero->video_url)
-                        @php $videoId = Str::afterLast($hero->video_url, '/'); @endphp
-                        <iframe width="100%" height="100%"
-                            src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0"
-                            frameborder="0" allowfullscreen class="scale-150"></iframe>
-                    @endif
-                    <div class="absolute inset-0 bg-black/40"></div>
-                </div>
-                <div class="relative z-20 flex items-center h-full px-8 lg:px-14">
-                    <div class="max-w-2xl text-white">
-                        <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
-                            EPHAC</h1>
-                        <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                            {{ optional($hero)->title ?? 'Trusted Manufacturer' }}</h2>
-                        <p class="mt-6 max-w-lg text-lg text-white/90">
-                            {{ optional($hero)->subtitle }}
-                            {{ optional($hero)->description }}
-                        </p>
+            <div class="bg-gradient-to-br rounded-t-[40px] from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff]">
+                {{-- HERO SECTION (Dynamic) --}}
+                <section class="relative overflow-hidden rounded-[20px] bg-black h-[620px] lg:h-[720px] shadow-2xl">
+                    <div class="absolute inset-0">
+                        @if ($hero && $hero->video_url)
+                            @php $videoId = Str::afterLast($hero->video_url, '/'); @endphp
+                            <iframe width="100%" height="100%"
+                                src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0"
+                                frameborder="0" allowfullscreen class="scale-150"></iframe>
+                        @endif
+                        <div class="absolute inset-0 bg-black/40"></div>
                     </div>
-                </div>
-            </section>
+                    <div class="relative z-20 flex items-center h-full px-8 lg:px-14">
+                        <div class="max-w-2xl text-white">
+                            <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
+                                EPHAC</h1>
+                            <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                                {{ optional($hero)->title ?? 'Trusted Manufacturer' }}</h2>
+                            <p class="mt-6 max-w-lg text-lg text-white/90">
+                                {{ optional($hero)->subtitle }}
+                                {{ optional($hero)->description }}
+                            </p>
 
-            {{-- ABOUT (Dynamic) --}}
-            <section class="py-24 text-center">
-                <h2 class="text-3xl font-bold text-[#1447b7] sm:text-4xl">{{ optional($about)->title ?? 'About Us' }}</h2>
-                <div class="mt-8 max-w-4xl mx-auto space-y-6 text-[#42588e] leading-relaxed">
-                    {!! nl2br(e(optional($about)->description ?? '')) !!}
-                </div>
-            </section>
+                            <div class="mt-10 flex flex-wrap gap-4">
+                                <a href="#contact"
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
+                                    Contact Us
+                                </a>
 
-            {{-- STATS --}}
-            <section class="pb-24">
-                <div class="grid grid-cols-2 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
-                    @foreach ($stats as $stat)
-                        {{-- Extract only numbers from the value (e.g., "100+" becomes 100) --}}
-                        @php
-                            $targetValue = (int) filter_var($stat['value'], FILTER_SANITIZE_NUMBER_INT);
-                            $suffix = str_replace($targetValue, '', $stat['value']);
-                        @endphp
-
-                        <div class="flex flex-col items-center text-center px-4" x-data="{
-                            current: 0,
-                            target: {{ $targetValue }},
-                            time: 2000,
-                            startAnimation() {
-                                let start = null;
-                                const step = (timestamp) => {
-                                    if (!start) start = timestamp;
-                                    const progress = Math.min((timestamp - start) / this.time, 1);
-                                    this.current = Math.floor(progress * this.target);
-                                    if (progress < 1) {
-                                        window.requestAnimationFrame(step);
-                                    }
-                                };
-                                window.requestAnimationFrame(step);
-                            }
-                        }"
-                            x-init="startAnimation()">
-
-                            <span class="text-6xl font-light text-[#1447b7]">
-                                <span x-text="current">0</span>{{ $suffix }}
-                            </span>
-
-                            <span
-                                class="mt-3 text-[11px] font-bold uppercase tracking-[0.15em] text-[#e31e24] leading-tight max-w-[130px]">
-                                {{ $stat['label'] }}
-                            </span>
+                                <a href="#products"
+                                    class="rounded-full bg-white text-[#1452db] px-10 py-3.5 text-sm font-bold hover:bg-gray-100 transition">
+                                    Explore Products
+                                </a>
+                            </div>
                         </div>
-                    @endforeach
-                </div>
-            </section>
+
+                    </div>
+                </section>
+
+                {{-- ABOUT (Dynamic) --}}
+                <section class="py-24 text-center">
+                    <h2 class="text-3xl font-bold text-[#1447b7] sm:text-4xl">{{ optional($about)->title ?? 'About Us' }}
+                    </h2>
+                    <div class="mt-8 max-w-4xl mx-auto space-y-6 text-[#42588e] leading-relaxed">
+                        {!! nl2br(e(optional($about)->description ?? '')) !!}
+                    </div>
+                </section>
+
+                {{-- STATS --}}
+                <section class="pb-24">
+                    <div class="grid grid-cols-2 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
+                        @foreach ($stats as $stat)
+                            {{-- Extract only numbers from the value (e.g., "100+" becomes 100) --}}
+                            @php
+                                $targetValue = (int) filter_var($stat['value'], FILTER_SANITIZE_NUMBER_INT);
+                                $suffix = str_replace($targetValue, '', $stat['value']);
+                            @endphp
+
+                            <div class="flex flex-col items-center text-center px-4" x-data="{
+                                current: 0,
+                                target: {{ $targetValue }},
+                                time: 2000,
+                                startAnimation() {
+                                    let start = null;
+                                    const step = (timestamp) => {
+                                        if (!start) start = timestamp;
+                                        const progress = Math.min((timestamp - start) / this.time, 1);
+                                        this.current = Math.floor(progress * this.target);
+                                        if (progress < 1) {
+                                            window.requestAnimationFrame(step);
+                                        }
+                                    };
+                                    window.requestAnimationFrame(step);
+                                }
+                            }"
+                                x-init="startAnimation()">
+
+                                <span class="text-6xl font-light text-[#1447b7]">
+                                    <span x-text="current">0</span>{{ $suffix }}
+                                </span>
+
+                                <span
+                                    class="mt-3 text-[11px] font-bold uppercase tracking-[0.15em] text-[#e31e24] leading-tight max-w-[130px]">
+                                    {{ $stat['label'] }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            </div>
+
 
             {{-- PRODUCTS (Dynamic) --}}
             <section class="py-16">
                 <div class="mx-auto max-w-7xl px-4">
-                    <h2 class="text-center text-[#1447b7] text-3xl font-bold mb-20">Product Categories</h2>
+                    <h2 class="text-center text-[#1447b7] text-3xl font-bold mb-20">Products Categorize</h2>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-20 gap-x-8 mb-16">
                         @foreach ($categories as $category)
@@ -272,7 +289,7 @@
             <div class="absolute inset-0 bg-[#0a2a5e]/80"></div>
             <h2 class="relative z-10 text-4xl font-bold text-white text-center">
                 Trusted Pharmaceutical Manufacturer in <br>
-                <span >Cambodia</span>
+                <span>Cambodia</span>
             </h2>
         </section>
     </section>

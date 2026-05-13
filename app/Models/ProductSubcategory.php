@@ -10,7 +10,7 @@ class ProductSubcategory extends Model
 {
     protected $table = 'product_subcategories';
 
-    protected $fillable = ['category_id', 'name', 'highlighted'];
+    protected $fillable = ['category_id', 'name','desc', 'highlighted'];
 
     public function category(): BelongsTo
     {

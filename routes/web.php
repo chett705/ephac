@@ -1,17 +1,17 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAboutUsController;
-use App\Http\Controllers\Admin\AdminProductController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminProductController;
 
 Route::get('/', [AdminController::class, 'homePage']);
 Route::get('/about-us', function () {
     return view('Frontend.Pages.AboutUS');
 });
-Route::get('/products', function () {
-    return view('Frontend.Pages.Product');
-})->name('Frontend.Pages.Product'); // This name must match the Blade call
+Route::get('/products', [AdminProductController::class, 'productPage'])
+    ->name('Frontend.Pages.Product');
 
 Route::get('/login', function () {
     return view('Admin.auth.Login');
@@ -55,11 +55,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('about.hero.update');    
 
         // product page
+    // Route::post('/home-cms/hero', [AdminProductController::class, 'updateHero'])
+    //     ->name('about.hero.update');      
         
    
 
-    // {{-- Product Management --}}
-    Route::get('/product-categories', [AdminController::class, 'productCategories'])->name('product_categories.index');
-    Route::get('/product-subcategories', [AdminController::class, 'productSubcategories'])->name('product_subcategories.index');
-    Route::get('/products', [AdminController::class, 'products'])->name('products.index');
+    // {{-- Product Management CMS --}}
+    Route::get('/products-cms', [AdminProductController::class, 'index'])->name('products.cms');
+    // Hero Section Management
+    Route::post('/products-cms/hero/update', [AdminProductController::class, 'updateHero'])
+    ->name('products.hero.update');
+    // ----------------------------
+    Route::post('/products-cms/category', [AdminProductController::class, 'storeCategory'])->name('product.category.store');
+    Route::put('/products-cms/category/{id}', [AdminProductController::class, 'updateCategory'])->name('product.category.update');
+    Route::delete('/products-cms/category/{id}', [AdminProductController::class, 'destroyCategory'])->name('product.category.destroy');
+
+    Route::post('/products-cms/subcategory', [AdminProductController::class, 'storeSubcategory'])->name('product.subcategory.store');
+    Route::put('/products-cms/subcategory/{id}', [AdminProductController::class, 'updateSubcategory'])->name('product.subcategory.update');
+    Route::delete('/products-cms/subcategory/{id}', [AdminProductController::class, 'destroySubcategory'])->name('product.subcategory.destroy');
+
+    Route::post('/products-cms/product', [AdminProductController::class, 'storeProduct'])->name('product.store');
+    Route::put('/products-cms/product/{id}', [AdminProductController::class, 'updateProduct'])->name('product.update');
+    Route::delete('/products-cms/product/{id}', [AdminProductController::class, 'destroyProduct'])->name('product.destroy');
 });

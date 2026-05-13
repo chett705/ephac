@@ -1,237 +1,243 @@
 @extends('Frontend.Layout.Main')
 
 @php
-    $categories = [
-        [
-            'title' => 'Core Therapeutic Categories',
-            'items' => [
-                ['name' => 'Pain Relief & Anti-inflammatory', 'highlighted' => true],
-                ['name' => 'Antibiotics & Antibacterial'],
-                ['name' => 'Antiparasitic & Anthelmintic'],
-                ['name' => 'Antifungal'],
-                ['name' => 'Antiviral'],
-            ],
-        ],
-        [
-            'title' => 'Respiratory & ENT',
-            'items' => [
-                ['name' => 'Cold & Flu Treatment'],
-                ['name' => 'Cough & Respiratory Care'],
-                ['name' => 'Allergy & Antihistamines'],
-            ],
-        ],
-        [
-            'title' => 'Cardiovascular & Metabolic',
-            'items' => [
-                ['name' => 'Cardiovascular (Blood Pressure / Heart)'],
-                ['name' => 'Diabetes Management'],
-                ['name' => 'Cholesterol Management'],
-            ],
-        ],
-        [
-            'title' => 'Neurology & Mental Health',
-            'items' => [['name' => 'Neurological & Nerve Support'], ['name' => 'Sedatives & Sleep Support']],
-        ],
-        [
-            'title' => 'Digestive System',
-            'items' => [
-                ['name' => 'Gastrointestinal (Stomach & Digestive)'],
-                ['name' => 'Anti-ulcer & Acid Control'],
-                ['name' => 'Anti-diarrheal'],
-            ],
-        ],
-        [
-            'title' => 'Women & General Health',
-            'items' => [
-                ['name' => 'Women\'s Health'],
-                ['name' => 'Multivitamins & Supplements'],
-                ['name' => 'Pediatric Care'],
-            ],
-        ],
-        [
-            'title' => 'Infection & Immunity',
-            'items' => [['name' => 'Immune Support Products'], ['name' => 'Anti-inflammatory (Systemic)']],
-        ],
-        [
-            'title' => 'Specialized Treatments',
-            'items' => [
-                ['name' => 'Anti-malarial'],
-                ['name' => 'Anti-tuberculosis (if applicable)'],
-                ['name' => 'Dermatology (Skin Treatments)'],
-            ],
-        ],
-        [
-            'title' => 'General Use & OTC',
-            'items' => [['name' => 'General OTC Medicines'], ['name' => 'Nutritional & Health Supplements']],
-        ],
-    ];
+    $productTree = $productCategories
+        ->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'title' => $category->title,
+                'subcategories' => $category->subcategories
+                    ->map(function ($subcategory) {
+                        return [
+                            'id' => $subcategory->id,
+                            'name' => $subcategory->name,
+                            'desc' => $subcategory->desc, // ENSURE THIS LINE IS HERE
+                            'highlighted' => (bool) $subcategory->highlighted,
+                            'products' => $subcategory->products
+                                ->map(function ($product) {
+                                    return [
+                                        'id' => $product->id,
+                                        'name' => $product->name,
+                                        'image' => $product->image ? asset('storage/' . $product->image) : null,
+                                        'description' => $product->description,
+                                        'benefits' => collect(preg_split('/\r\n|\r|\n/', (string) $product->benefits))
+                                            ->map(fn($benefit) => trim($benefit))
+                                            ->filter()
+                                            ->values()
+                                            ->all(),
+                                        'button_text' => $product->button_text ?: 'Order Now',
+                                    ];
+                                })
+                                ->values()
+                                ->all(),
+                        ];
+                    })
+                    ->values()
+                    ->all(),
+            ];
+        })
+        ->values()
+        ->all();
 @endphp
 
 @section('content')
-    <div class="mx-auto max-w-7xl" x-data="{
-        view: 'categories',
-        selectedCategory: '',
-        selectedSub: '',
-        selectedProduct: 'Product Item Detail Name'
-    }">
+    <div x-data="productPage(@js($productTree))" x-cloak>
 
-        {{-- VIEW 1: HERO & CATEGORIES GRID --}}
+        {{-- View: Categories --}}
         <div x-show="view === 'categories'" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-95">
-            {{-- HERO SECTION --}}
-            <section
-                class="relative overflow-hidden rounded-[45px] bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] shadow-[0_20px_50px_rgba(30,76,161,0.15)] h-[620px] lg:h-[720px]">
-                <div class="absolute inset-0 overflow-hidden rounded-[45px]">
-                    <iframe width="100%" height="100%"
-                        src="https://www.youtube.com/embed/mgR1Mwnram8?autoplay=1&loop=1&playlist=mgR1Mwnram8&mute=1&controls=0"
-                        frameborder="0" allowfullscreen></iframe>
-                    <div class="absolute inset-0 bg-black/40"></div>
-                </div>
-
-                <div class="relative z-20 grid items-center gap-8 px-8 py-12 lg:grid-cols-2 lg:px-14 lg:py-20 h-full">
-                    <div class="max-w-2xl">
-                        <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
-                            PRODUCTS</h1>
-                        <h2 class="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-                            Trusted Pharmaceutical Manufacturer in Cambodia
-                        </h2>
-                        <p class="mt-6 max-w-lg text-base leading-relaxed text-white/90">
-                            High-quality healthcare solutions manufactured with international standards to ensure the
-                            well-being of our community.
-                        </p>
-                        <div class="mt-10 flex flex-wrap gap-4">
-                            <a href="#contact"
-                                class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition shadow-lg">Contact
-                                Us</a>
-                            <a href="#products-list"
-                                class="rounded-full bg-white text-[#1452db] px-10 py-3.5 text-sm font-bold hover:bg-gray-100 transition">Explore
-                                Products</a>
+            <div class="bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] rounded-t-[40px]">
+                {{-- Hero Section --}}
+                <section
+                    class="relative overflow-hidden rounded-[20px] shadow-[0_20px_50px_rgba(30,76,161,0.15)] h-[620px] lg:h-[750px]">
+                    <div class="absolute inset-0 z-0">
+                        <div
+                            class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                            <iframe class="w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
+                                src="https://www.youtube.com/embed/mgR1Mwnram8?autoplay=1&loop=1&playlist=mgR1Mwnram8&mute=1&controls=0&rel=0&modestbranding=1"
+                                frameborder="0" allow="autoplay; fullscreen"></iframe>
+                        </div>
+                        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
+                    </div>
+                    <div class="relative z-10 mx-auto max-w-7xl px-8 lg:px-14 flex items-center h-full">
+                        <div class="max-w-3xl">
+                            <h1
+                                class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl drop-shadow-lg">
+                                EPHAC</h1>
+                            <h2 class="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-6xl">Trusted
+                                Pharmaceutical <br class="hidden lg:block"> Manufacturer in Cambodia</h2>
+                            <div class="mt-10 flex flex-wrap gap-4">
+                                <a href="#products-list"
+                                    class="rounded-full bg-[#1452db] px-10 py-4 text-sm font-bold text-white hover:bg-[#0f3a9e] transition shadow-lg">Explore
+                                    Products</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {{-- GRID SECTION --}}
-            <section id="products-list" class="py-24 bg-gradient-to-b from-[#eaf6ff] to-[#f4faff]">
-                <div class="max-w-7xl mx-auto px-6">
-                    <h2 class="text-4xl md:text-5xl text-center font-extrabold text-[#0a38a0] mb-20">Products</h2>
-                    <div class="flex flex-wrap justify-center gap-5">
-                        @foreach ($categories as $category)
-                            <div
-                                class="flex flex-col w-full sm:w-[calc(50%-20px)] lg:w-[calc(33.33%-20px)] xl:w-[calc(20%-20px)] bg-white/60 backdrop-blur-sm rounded-[32px] border border-blue-100/50 p-8 shadow-sm hover:shadow-md transition-all">
-                                <h3 class="text-[#0a38a0] text-xl font-bold mb-8 leading-snug">{{ $category['title'] }}</h3>
-                                <div class="flex flex-col gap-4">
-                                    @foreach ($category['items'] as $item)
-                                        <div @click="view = 'subcategory'; selectedCategory = '{{ $category['title'] }}'; selectedSub = '{{ $item['name'] }}'; window.scrollTo(0,0)"
-                                            class="cursor-pointer transition-colors text-[14px] font-medium leading-tight {{ !empty($item['highlighted']) ? 'bg-[#0a38a0] text-white py-2 px-5 rounded-full inline-block text-center shadow-sm' : 'text-[#2d52a8] hover:text-[#1452db]' }}">
-                                            {{ $item['name'] }}
-                                        </div>
-                                    @endforeach
+                {{-- Categories Grid --}}
+                <section id="products-list" class="py-24 px-6">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="text-4xl md:text-5xl text-center font-extrabold text-[#0a38a0] mb-20">Products</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                            <template x-for="category in categories" :key="category.id">
+                                <div
+                                    class="flex flex-col bg-white/70 backdrop-blur-md rounded-[32px] border border-white/50 p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+                                    <h3 class="text-[#0a38a0] text-xl font-black mb-6 border-b border-blue-100 pb-4 h-14 overflow-hidden"
+                                        x-text="category.title"></h3>
+                                    <div class="flex flex-col gap-3">
+                                        <template x-for="subcategory in category.subcategories" :key="subcategory.id">
+                                            <button type="button" @click="openSubcategory(category, subcategory)"
+                                                class="transition-all text-[14px] font-bold text-left py-2 px-4 rounded-xl group"
+                                                :class="subcategory.highlighted ? 'bg-[#0a38a0] text-white' :
+                                                    'text-[#2d52a8] hover:bg-blue-50'">
+                                                <span x-text="subcategory.name"></span>
+                                            </button>
+                                        </template>
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            </template>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
 
-        {{-- VIEW 2: SUBCATEGORY PRODUCTS (Matches image_f24f4f.jpg) --}}
-        <section x-show="view === 'subcategory'" x-cloak
-            class="py-24 px-6 bg-gradient-to-b from-[#eaf6ff] to-white min-h-screen"
+        {{-- View: Subcategory Products --}}
+        <section x-show="view === 'subcategory'" class="py-24 px-6 min-h-screen bg-gray-50"
             x-transition:enter="transition ease-out duration-300">
-            <div class="max-w-6xl mx-auto">
-                <button @click="view = 'categories'; window.scrollTo(0,0)"
-                    class="text-[#0a38a0] mb-12 flex items-center font-bold hover:underline">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="max-w-7xl mx-auto">
+                <button @click="backToCategories()"
+                    class="text-[#0a38a0] mb-12 flex items-center font-bold hover:gap-2 transition-all">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                     Back to Categories
                 </button>
+                <h1 class="text-5xl font-black text-[#0a38a0] mb-2" x-text="selectedCategory?.title"></h1>
+                <h2 class="text-2xl font-bold text-gray-500 mb-6" x-text="selectedSubcategory?.name"></h2>
+                
+                {{-- SUBCATEGORY DESCRIPTION FIXED --}}
+                <div class="max-w-4xl mb-12">
+                    <p class="text-xl text-gray-700 leading-relaxed" x-text="selectedSubcategory?.desc || 'Quality pharmaceutical solutions manufactured under strict standards.'"></p>
+                </div>
 
-                <h1 class="text-5xl font-extrabold text-[#0a38a0] mb-4" x-text="selectedCategory"></h1>
-                <h2 class="text-3xl font-bold text-[#0a38a0] mb-8" x-text="selectedSub"></h2>
-
-                <p class="max-w-4xl text-gray-700 text-lg leading-relaxed mb-16">
-                    Our <span x-text="selectedSub.toLowerCase()"></span> medicines are designed to effectively reduce
-                    symptoms and promote recovery. Manufactured under strict quality standards, these products provide safe
-                    and reliable solutions for health management.
-                </p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
-                    <template x-for="i in 4" :key="i">
-                        <div class="flex flex-col">
-                            <div class="w-full aspect-square bg-[#e2e8f0] rounded-[30px] mb-6 shadow-inner"></div>
-                            <button @click="view = 'product-detail'; window.scrollTo(0,0)"
-                                class="w-full py-4 rounded-full font-bold transition shadow-lg active:scale-95"
-                                :class="i === 1 ? 'bg-[#0a38a0] text-white hover:bg-[#082d80]' :
-                                    'bg-[#b6e3f8] text-[#0a38a0] hover:bg-[#a2d4ed]'">
-                                View Detail
-                            </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <template x-for="product in selectedSubcategory?.products || []" :key="product.id">
+                        <div class="bg-white rounded-[30px] p-6 shadow-lg hover:shadow-2xl transition-all group">
+                            <div class="aspect-square bg-gray-100 rounded-[20px] mb-6 overflow-hidden">
+                                <img :src="product.image"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <h4 class="text-xl font-bold text-[#0a38a0] mb-6 h-14 line-clamp-2" x-text="product.name"></h4>
+                            <button @click="openProduct(product)"
+                                class="w-full py-4 rounded-full font-bold bg-[#0a38a0] text-white hover:bg-[#e31e24] transition-colors shadow-lg">View
+                                Details</button>
                         </div>
                     </template>
                 </div>
             </div>
         </section>
 
-        {{-- VIEW 3: PRODUCT DETAIL (Matches image_f1fd54.png) --}}
-        <section x-show="view === 'product-detail'" x-cloak class="py-24 px-6 bg-white min-h-screen"
+        {{-- View: Product Detail --}}
+        <section x-show="view === 'product-detail'" class="py-24 px-6 min-h-screen bg-white"
             x-transition:enter="transition ease-out duration-300">
-            <div class="max-w-6xl mx-auto">
-                <button @click="view = 'subcategory'; window.scrollTo(0,0)"
-                    class="text-[#0a38a0] mb-12 flex items-center font-bold hover:underline">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="max-w-7xl mx-auto">
+                <button @click="backToSubcategory()"
+                    class="text-[#0a38a0] mb-12 flex items-center font-bold hover:gap-2 transition-all">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
-                    Back to <span class="ml-1" x-text="selectedSub"></span>
+                    Back to <span class="ml-1" x-text="selectedSubcategory?.name"></span>
                 </button>
 
-                <h2 class="text-4xl font-bold text-[#0a38a0] mb-16" x-text="selectedSub"></h2>
+                <div class="flex flex-col lg:flex-row gap-16 items-start">
+                    <div class="w-full lg:w-1/2 lg:sticky lg:top-32">
+                        <div
+                            class="bg-gray-50 rounded-[40px] aspect-square shadow-2xl overflow-hidden border-8 border-white group">
+                            <template x-if="selectedProduct?.image">
+                                <img :src="selectedProduct.image" :alt="selectedProduct.name"
+                                    class="w-full h-full object-contain p-12 transition-transform duration-700 group-hover:scale-105">
+                            </template>
+                        </div>
+                    </div>
 
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    {{-- Product Image Placeholder --}}
-                    <div class="bg-[#e2e8f0] rounded-[40px] aspect-square w-full shadow-lg"></div>
+                    <div class="w-full lg:w-1/2">
+                        <span class="text-[#e31e24] font-black tracking-widest uppercase text-sm"
+                            x-text="selectedSubcategory?.name"></span>
+                        <h3 class="text-5xl lg:text-7xl font-black text-[#0a38a0] mt-2 mb-8 leading-tight"
+                            x-text="selectedProduct?.name"></h3>
 
-                    <div class="flex flex-col items-start">
-                        <h3 class="text-5xl font-extrabold text-[#0a38a0] mb-8" x-text="selectedProduct"></h3>
-                        <p class="text-gray-600 text-lg mb-10 leading-relaxed">
-                            This pharmaceutical solution is formulated for maximum efficacy and safety. Our manufacturing
-                            process adheres to international GMP standards to ensure every batch meets the highest quality
-                            expectations.
-                        </p>
+                        <div class="prose prose-xl text-gray-600 mb-12 leading-relaxed">
+                            <p x-text="selectedProduct?.description"></p>
+                        </div>
 
-                        <ul class="space-y-5 mb-12 text-gray-800 font-medium">
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-black rounded-full"></span>
-                                Manufactured under strict quality standards
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-black rounded-full"></span>
-                                These products provide safe and reliable solutions
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="w-2 h-2 bg-black rounded-full"></span>
-                                For managing common health conditions effectively
-                            </li>
-                        </ul>
+                        <div class="space-y-6 mb-16" x-show="selectedProduct?.benefits.length">
+                            <h4 class="text-2xl font-bold text-gray-900 mb-4">Key Benefits & Features</h4>
+                            <template x-for="(benefit, index) in selectedProduct?.benefits || []" :key="index">
+                                <div class="flex items-start gap-5 bg-blue-50/50 p-6 rounded-3xl border border-blue-100/50">
+                                    <div class="mt-1.5 w-4 h-4 bg-[#e31e24] rounded-full flex-shrink-0"></div>
+                                    <span class="font-bold text-lg text-[#0a38a0]" x-text="benefit"></span>
+                                </div>
+                            </template>
+                        </div>
 
                         <button
-                            class="bg-gradient-to-r from-[#0a38a0] to-[#1452db] text-white px-16 py-5 rounded-full font-bold text-xl shadow-[0_10px_30px_rgba(20,82,219,0.3)] hover:translate-y-[-2px] transition transform active:scale-95">
-                            Order Now
+                            class="bg-[#0a38a0] text-white px-16 py-6 rounded-full font-black text-2xl shadow-2xl hover:bg-[#e31e24] transition-all transform active:scale-95">
+                            <span x-text="selectedProduct?.button_text"></span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
+        {{-- Footer Banner --}}
+        <section class="relative w-full h-[400px] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="{{ asset('storage/backgrounds/pharma-hands-bg.jpg') }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-[#0a2a5e]/85"></div>
+            </div>
+            <div class="relative z-10 text-center px-6">
+                <h2 class="text-4xl md:text-6xl font-black text-white leading-tight">Trusted Pharmaceutical <br>
+                    Manufacturer in <span class="text-[#e31e24]">Cambodia</span></h2>
+            </div>
+        </section>
     </div>
 
-    {{-- Inline CSS for x-cloak (prevents flickering on load) --}}
     <style>
-        [x-cloak] {
-            display: none !important;
-        }
+        [x-cloak] { display: none !important; }
+        html { scroll-behavior: smooth; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 
-    {{-- Ensure Alpine.js is included --}}
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        function productPage(categories) {
+            return {
+                categories,
+                view: 'categories',
+                selectedCategory: null,
+                selectedSubcategory: null,
+                selectedProduct: null,
+                openSubcategory(category, subcategory) {
+                    this.selectedCategory = category;
+                    this.selectedSubcategory = subcategory;
+                    this.view = 'subcategory';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                openProduct(product) {
+                    this.selectedProduct = product;
+                    this.view = 'product-detail';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                backToCategories() {
+                    this.view = 'categories';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                backToSubcategory() {
+                    this.view = 'subcategory';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+        }
+    </script>
 @endsection
