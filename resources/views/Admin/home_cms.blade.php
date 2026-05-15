@@ -3,6 +3,8 @@
 @section('content')
     <div class="max-w-5xl mx-auto space-y-12 pb-20">
 
+        
+
         {{-- Notification Messages --}}
         @if (session('success'))
             <div id="alert-success"
@@ -17,21 +19,10 @@
         @endif
 
         @if ($errors->any())
-            <div id="alert-error"
-                class="flex items-start p-4 mb-4 text-red-800 rounded-2xl bg-red-50 border border-red-200 shadow-sm">
-                <i class="fas fa-exclamation-circle mt-1 mr-3"></i>
-                <div>
-                    <div class="text-sm font-bold">Please check the errors below:</div>
-                    <ul class="mt-1 ml-4 list-disc list-inside text-xs">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                <button type="button" onclick="this.parentElement.remove()"
-                    class="ml-auto text-red-500 hover:text-red-700">
-                    <i class="fas fa-times"></i>
-                </button>
+            <div class="bg-red-100 p-3 rounded">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
             </div>
         @endif
 
@@ -107,10 +98,10 @@
         <section id="categories" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-lg font-bold text-gray-800">Category Management</h3>
-                <button type="button" onclick="openCategoryModal()"
+                {{-- <button type="button" onclick="openCategoryModal()"
                     class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
                     <i class="fas fa-plus mr-2"></i> Add Category
-                </button>
+                </button> --}}
             </div>
 
             <div class="p-6">
@@ -130,8 +121,7 @@
                                         <div class="flex items-center space-x-3">
                                             @if ($category->image)
                                                 <img src="{{ asset('uploads/categories/' . $category->image) }}"
-                                                    alt="{{ $category->name }}"
-                                                    class="w-10 h-10 rounded-lg object-cover">
+                                                    alt="{{ $category->name }}" class="w-10 h-10 rounded-lg object-cover">
                                             @else
                                                 <div
                                                     class="w-10 h-10 rounded-lg bg-gray-100 text-gray-400 flex items-center justify-center">
@@ -145,12 +135,11 @@
                                         {{ \Illuminate\Support\Str::limit($category->description, 80) ?: 'No description' }}
                                     </td>
                                     <td class="py-4 text-right space-x-2">
-                                        <button type="button"
-                                            onclick='openCategoryModal(@json(["id" => $category->id, "name" => $category->name, "description" => $category->description]))'
+                                        <button type="button" onclick='openCategoryModal(@json(['id' => $category->id, 'name' => $category->name, 'description' => $category->description]))'
                                             class="text-blue-600 hover:text-blue-800">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <form action="{{ route('admin.home.category.destroy', $category->id) }}"
+                                        {{-- <form action="{{ route('admin.home.category.destroy', $category->id) }}"
                                             method="POST" class="inline"
                                             onsubmit="return confirm('Delete this category?')">
                                             @csrf
@@ -158,7 +147,7 @@
                                             <button type="submit" class="text-red-500 hover:text-red-700">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @empty
@@ -311,7 +300,7 @@
                                     </td>
                                     <td class="py-4 text-right space-x-2">
                                         <button type="button"
-                                            onclick='openCertificateModal(@json(["id" => $certificate->id, "title" => $certificate->title]))'
+                                            onclick='openCertificateModal(@json(['id' => $certificate->id, 'title' => $certificate->title]))'
                                             class="text-blue-600 hover:text-blue-800">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -328,7 +317,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-6 text-center text-gray-500">No certificates found yet.</td>
+                                    <td colspan="3" class="py-6 text-center text-gray-500">No certificates found yet.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -364,10 +354,10 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Category Image</label>
-                        <input type="file" name="image" id="categoryImage" accept="image/*"
-                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <p id="categoryImageHint" class="text-xs text-gray-400 mt-1">Image is required for new category.</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-2"></label>
+                        {{-- <input type="file" name="image" id="categoryImage" accept="image/*"
+                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"> --}}
+                        {{-- <p id="categoryImageHint" class="text-xs text-gray-400 mt-1"></p> --}}
                     </div>
 
                     <div class="flex justify-end pt-4 space-x-3">
@@ -406,7 +396,8 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Certificate Image</label>
                         <input type="file" name="image" id="certificateImage" accept="image/*"
                             class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <p id="certificateImageHint" class="text-xs text-gray-400 mt-1">Image is required for new certificate.</p>
+                        <p id="certificateImageHint" class="text-xs text-gray-400 mt-1">Image is required for new
+                            certificate.</p>
                     </div>
 
                     <div class="flex justify-end pt-4 space-x-3">
@@ -422,7 +413,7 @@
         </div>
 
         {{-- QUALITY MANAGEMENT --}}
-       
+
 
     </div>
 @endsection
@@ -435,8 +426,8 @@
         const categoryMethodField = document.getElementById('categoryMethodField');
         const categoryName = document.getElementById('categoryName');
         const categoryDescription = document.getElementById('categoryDescription');
-        const categoryImage = document.getElementById('categoryImage');
-        const categoryImageHint = document.getElementById('categoryImageHint');
+        // const categoryImage = document.getElementById('categoryImage');
+        // const categoryImageHint = document.getElementById('categoryImageHint');
 
         const leaderModal = document.getElementById('leaderModal');
         const leaderForm = document.getElementById('leaderForm');
@@ -460,15 +451,15 @@
                 categoryMethodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
                 categoryName.value = category.name ?? '';
                 categoryDescription.value = category.description ?? '';
-                categoryImage.required = false;
-                categoryImageHint.textContent = 'Upload a new image only if you want to replace the current one.';
+                // categoryImage.required = false;
+                // categoryImageHint.textContent = 'Upload a new image only if you want to replace the current one.';
             } else {
                 categoryModalTitle.textContent = 'Add New Category';
                 categoryForm.action = '{{ route('admin.home.category.store') }}';
                 categoryMethodField.innerHTML = '';
                 categoryForm.reset();
                 categoryImage.required = true;
-                categoryImageHint.textContent = 'Image is required for new category.';
+                // categoryImageHint.textContent = 'Image is required for new category.';
             }
 
             categoryModal.classList.remove('hidden');

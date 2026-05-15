@@ -47,31 +47,40 @@
         <div x-show="view === 'categories'" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-95">
             <div class="bg-gradient-to-br from-[#dff3ff] via-[#c7e7ff] to-[#b2d9ff] rounded-t-[40px]">
-                {{-- Hero Section --}}
-                <section
-                    class="relative overflow-hidden rounded-[20px] shadow-[0_20px_50px_rgba(30,76,161,0.15)] h-[620px] lg:h-[750px]">
-                    <div class="absolute inset-0 z-0">
-                        <div
-                            class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                            <iframe class="w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
-                                src="https://www.youtube.com/embed/mgR1Mwnram8?autoplay=1&loop=1&playlist=mgR1Mwnram8&mute=1&controls=0&rel=0&modestbranding=1"
-                                frameborder="0" allow="autoplay; fullscreen"></iframe>
-                        </div>
-                        <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
+                <section class="relative overflow-hidden rounded-[20px] bg-black h-[620px] lg:h-[720px] shadow-2xl">
+                    <div class="absolute inset-0">
+                        @if ($hero && $hero->video_url)
+                            @php $videoId = Str::afterLast($hero->video_url, '/'); @endphp
+                            <iframe width="100%" height="100%"
+                                src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0"
+                                frameborder="0" allowfullscreen class="scale-150"></iframe>
+                        @endif
+                        <div class="absolute inset-0 bg-black/40"></div>
                     </div>
-                    <div class="relative z-10 mx-auto max-w-7xl px-8 lg:px-14 flex items-center h-full">
-                        <div class="max-w-3xl">
-                            <h1
-                                class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl drop-shadow-lg">
+                    <div class="relative z-20 flex items-center h-full px-8 lg:px-14">
+                        <div class="max-w-2xl text-white">
+                            <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
                                 EPHAC</h1>
-                            <h2 class="mt-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-6xl">Trusted
-                                Pharmaceutical <br class="hidden lg:block"> Manufacturer in Cambodia</h2>
+                            <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                                {{ optional($hero)->title ?? 'Trusted Manufacturer' }}</h2>
+                            <p class="mt-6 max-w-lg text-lg text-white/90">
+                                {{ optional($hero)->subtitle }}
+                                {{ optional($hero)->description }}
+                            </p>
+
                             <div class="mt-10 flex flex-wrap gap-4">
-                                <a href="#products-list"
-                                    class="rounded-full bg-[#1452db] px-10 py-4 text-sm font-bold text-white hover:bg-[#0f3a9e] transition shadow-lg">Explore
-                                    Products</a>
+                                <a href="#contact"
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
+                                    Contact Us
+                                </a>
+
+                                <a href="{{ route('Frontend.Pages.Product') }}#products-list"
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
+                                    Explore Products
+                                </a>
                             </div>
                         </div>
+
                     </div>
                 </section>
 
@@ -116,10 +125,12 @@
                 </button>
                 <h1 class="text-5xl font-black text-[#0a38a0] mb-2" x-text="selectedCategory?.title"></h1>
                 <h2 class="text-2xl font-bold text-gray-500 mb-6" x-text="selectedSubcategory?.name"></h2>
-                
+
                 {{-- SUBCATEGORY DESCRIPTION FIXED --}}
                 <div class="max-w-4xl mb-12">
-                    <p class="text-xl text-gray-700 leading-relaxed" x-text="selectedSubcategory?.desc || 'Quality pharmaceutical solutions manufactured under strict standards.'"></p>
+                    <p class="text-xl text-gray-700 leading-relaxed"
+                        x-text="selectedSubcategory?.desc || 'Quality pharmaceutical solutions manufactured under strict standards.'">
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -173,10 +184,10 @@
                         </div>
 
                         <div class="space-y-6 mb-16" x-show="selectedProduct?.benefits.length">
-                            <h4 class="text-2xl font-bold text-gray-900 mb-4">Key Benefits & Features</h4>
+
                             <template x-for="(benefit, index) in selectedProduct?.benefits || []" :key="index">
                                 <div class="flex items-start gap-5 bg-blue-50/50 p-6 rounded-3xl border border-blue-100/50">
-                                    <div class="mt-1.5 w-4 h-4 bg-[#e31e24] rounded-full flex-shrink-0"></div>
+                                    <div class="mt-1.5 w-4 h-4 bg-[#000000] rounded-full flex-shrink-0"></div>
                                     <span class="font-bold text-lg text-[#0a38a0]" x-text="benefit"></span>
                                 </div>
                             </template>
@@ -191,23 +202,33 @@
             </div>
         </section>
 
-        {{-- Footer Banner --}}
-        <section class="relative w-full h-[400px] flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img src="{{ asset('storage/backgrounds/pharma-hands-bg.jpg') }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-[#0a2a5e]/85"></div>
-            </div>
-            <div class="relative z-10 text-center px-6">
-                <h2 class="text-4xl md:text-6xl font-black text-white leading-tight">Trusted Pharmaceutical <br>
-                    Manufacturer in <span class="text-[#e31e24]">Cambodia</span></h2>
-            </div>
+        {{-- TRUSTED BANNER (Fixed) --}}
+        <section class="relative w-screen left-1/2 right-1/2 -mx-[50vw] h-[300px] flex items-center justify-center">
+            <div class="absolute inset-0 bg-cover bg-center opacity-50"
+                style="background-image: url('{{ asset('storage/backgrounds/pharma-hands-bg.jpg') }}');"></div>
+            <div class="absolute inset-0 bg-[#0a2a5e]/80"></div>
+            <h2 class="relative z-10 text-4xl font-bold text-white text-center">
+                Trusted Pharmaceutical Manufacturer in <br>
+                <span>Cambodia</span>
+            </h2>
         </section>
     </div>
 
     <style>
-        [x-cloak] { display: none !important; }
-        html { scroll-behavior: smooth; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        [x-cloak] {
+            display: none !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 
     <script>
@@ -222,20 +243,32 @@
                     this.selectedCategory = category;
                     this.selectedSubcategory = subcategory;
                     this.view = 'subcategory';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 },
                 openProduct(product) {
                     this.selectedProduct = product;
                     this.view = 'product-detail';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 },
                 backToCategories() {
                     this.view = 'categories';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 },
                 backToSubcategory() {
                     this.view = 'subcategory';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 }
             };
         }

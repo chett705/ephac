@@ -10,7 +10,7 @@
             ['value' => '150', 'label' => 'Products'],
             ['value' => '25', 'label' => 'Nationwide Distributors'],
             ['value' => '26', 'label' => 'Categories'],
-            ['value' => '02', 'label' => 'Decades of Operation'],
+            ['value' => '2', 'label' => 'Decades of Operation'],
             ['value' => '100+', 'label' => 'Employees'],
         ];
 
@@ -88,8 +88,8 @@
                                     Contact Us
                                 </a>
 
-                                <a href="#products"
-                                    class="rounded-full bg-white text-[#1452db] px-10 py-3.5 text-sm font-bold hover:bg-gray-100 transition">
+                                <a href="{{ route('Frontend.Pages.Product') }}#products-list"
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
                                     Explore Products
                                 </a>
                             </div>

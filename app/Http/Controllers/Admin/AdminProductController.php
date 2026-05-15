@@ -14,6 +14,8 @@ use Illuminate\Validation\ValidationException;
 
 class AdminProductController extends Controller
 {
+    protected const PRODUCT_HERO_ORDER = 3;
+
     // hero
     // public function productPage1()
     // {
@@ -48,7 +50,7 @@ class AdminProductController extends Controller
      */
     public function productCms()
     {
-        $hero = Hero::find(3);
+        $hero = $this->productHero();
 
 
         return view('Admin.product_cms', compact(
@@ -68,9 +70,9 @@ class AdminProductController extends Controller
         ]);
 
         $data = $request->only(['title', 'subtitle', 'description', 'video_url']);
-        $data['order'] = 3;
+        $data['order'] = self::PRODUCT_HERO_ORDER;
 
-        Hero::updateOrCreate(['id' => 3], $data);
+        Hero::updateOrCreate(['order' => self::PRODUCT_HERO_ORDER], $data);
 
         return redirect()->back()->with('success', 'Hero section updated successfully!');
     }
@@ -80,7 +82,7 @@ class AdminProductController extends Controller
     public function productPage()
     {
         $productCategories = $this->safeFrontendCategories();
-         $hero = $this->safeFirst(new Hero());
+        $hero = $this->productHero();
 
         return view('Frontend.Pages.Product', compact('productCategories','hero'));
     }
@@ -90,7 +92,7 @@ class AdminProductController extends Controller
         $productCategories = $this->safeProductCategories();
         $productSubcategories = $this->safeProductSubcategories();
         $products = $this->safeProducts();
-        $hero = $this->safeFirst(new Hero());
+        $hero = $this->productHero();
 
         return view('Admin.product_cms', compact(
             'productCategories',
@@ -106,13 +108,26 @@ class AdminProductController extends Controller
         $productCategories = $this->safeProductCategories();
         $productSubcategories = $this->safeProductSubcategories();
         $products = Product::where('subcategory_id', $subcategoryId)->latest()->get();
+        $hero = $this->productHero();
 
         return view('Admin.product_cms', compact(
             'selectedSubcategory',
             'productCategories',
             'productSubcategories',
-            'products'
+            'products',
+            'hero'
         ));
+    }
+
+    protected function productHero()
+    {
+        if (!Schema::hasTable((new Hero())->getTable())) {
+            return null;
+        }
+
+        return Hero::query()
+            ->where('order', self::PRODUCT_HERO_ORDER)
+            ->first();
     }
 
     public function storeProduct(Request $request)
@@ -208,7 +223,7 @@ class AdminProductController extends Controller
         $request->validate([
             'category_id' => 'required|exists:product_categories,id',
             'name' => 'required|string|max:255',
-            'desc' => 'required|string|max:255'
+            'desc' => 'required|string|max:999'
         ]);
         $data = $request->all();
         $data['highlighted'] = $request->has('highlighted');
@@ -222,7 +237,7 @@ class AdminProductController extends Controller
         $request->validate([
             'category_id' => 'required|exists:product_categories,id',
             'name' => 'required|string|max:255',
-            'desc' => 'required|string|max:255',
+            'desc' => 'required|string|max:999',
         ]);
         $data = $request->all();
         $data['highlighted'] = $request->has('highlighted');

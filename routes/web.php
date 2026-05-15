@@ -5,11 +5,15 @@ use App\Http\Controllers\Admin\AdminAboutUsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\SettingController;
 
 Route::get('/', [AdminController::class, 'homePage']);
-Route::get('/about-us', function () {
-    return view('Frontend.Pages.AboutUS');
-});
+// Route::get('/about-us', function () {
+//     return view('Frontend.Pages.AboutUS');
+// });
+Route::get('/about-us', [AdminAboutUsController::class, 'aboutPage'])
+    ->name('Frontend.Pages.AboutUs');
+
 Route::get('/products', [AdminProductController::class, 'productPage'])
     ->name('Frontend.Pages.Product');
 
@@ -66,6 +70,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/products-cms/hero/update', [AdminProductController::class, 'updateHero'])
     ->name('products.hero.update');
     // ----------------------------
+
+    //setting cms
+    Route::get('/settin-cms', [SettingController::class, 'index'])->name('setting.cms');
+    
+
+
+
+
     Route::post('/products-cms/category', [AdminProductController::class, 'storeCategory'])->name('product.category.store');
     Route::put('/products-cms/category/{id}', [AdminProductController::class, 'updateCategory'])->name('product.category.update');
     Route::delete('/products-cms/category/{id}', [AdminProductController::class, 'destroyCategory'])->name('product.category.destroy');

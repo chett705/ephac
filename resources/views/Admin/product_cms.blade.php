@@ -18,9 +18,41 @@
     
         // Edit Data States
         editCat: { id: '', title: '' },
-        editSub: { id: '', catId: '', name: '', highlighted: false },
+        editSub: { id: '', catId: '', name: '', desc: '', highlighted: false },
         editProd: { id: '', subId: '', name: '', desc: '', benefits: '', btnText: '' }
     }">
+
+        {{-- Notification Messages --}}
+        @if (session('success'))
+            <div id="alert-success"
+                class="mb-6 flex items-center rounded-2xl border border-green-200 bg-green-50 p-4 text-green-800 shadow-sm">
+                <i class="fas fa-check-circle mr-3"></i>
+                <div class="text-sm font-bold">{{ session('success') }}</div>
+                <button type="button" onclick="this.parentElement.remove()"
+                    class="ml-auto text-green-500 hover:text-green-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div id="alert-error"
+                class="mb-6 flex items-start rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800 shadow-sm">
+                <i class="fas fa-exclamation-circle mr-3 mt-1"></i>
+                <div>
+                    <div class="text-sm font-bold">Please check the errors below:</div>
+                    <ul class="ml-4 mt-1 list-inside list-disc text-xs">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button type="button" onclick="this.parentElement.remove()"
+                    class="ml-auto text-red-500 hover:text-red-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
 
         {{-- HERO SECTION MANAGEMENT --}}
         <section id="hero" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
@@ -70,9 +102,9 @@
             </div>
         </section>
 
-        <section id="" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+        <section id="catalog-management" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-800">Hero Section Management</h3>
+                <h3 class="text-lg font-bold text-gray-800">Product  Management</h3>
             </div>
             <div class="p-6">
                 <div class="container mx-auto">
@@ -93,12 +125,6 @@
                                 'text-gray-500 hover:text-gray-700'"
                             class="rounded-lg px-4 py-2 font-semibold transition">Products</button>
                     </div>
-
-                    <!-- Alerts -->
-                    @if (session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                            {{ session('success') }}</div>
-                    @endif
 
                     <!-- CATEGORIES TAB -->
                     <div x-show="tab === 'categories'" x-cloak>
@@ -172,10 +198,10 @@
                                             </td>
                                             <td class="px-6 py-4 text-right flex justify-end gap-3">
                                                 <button
-                                                    @click="editSub = {id: '{{ $sub->id }}', catId: '{{ $sub->category_id }}', name: @js($sub->name), highlighted: {{ $sub->highlighted ? 'true' : 'false' }}}; editSubcategoryModal = true"
+                                                    @click="editSub = {id: '{{ $sub->id }}', catId: '{{ $sub->category_id }}', name: @js($sub->name), desc: @js($sub->desc), highlighted: {{ $sub->highlighted ? 'true' : 'false' }}}; editSubcategoryModal = true"
                                                     class="text-blue-500 hover:underline">Edit</button>
                                                 <form action="{{ route('admin.product.subcategory.destroy', $sub->id) }}"
-                                                    method="POST">
+                                                    method="POST" onsubmit="return confirm('Delete subcategory?')">
                                                     @csrf @method('DELETE')
                                                     <button class="text-red-500 hover:underline">Delete</button>
                                                 </form>
@@ -227,7 +253,7 @@
                                 }; editProductModal = true"
                                                     class="text-blue-500 hover:underline">Edit</button>
                                                 <form action="{{ route('admin.product.destroy', $prod->id) }}"
-                                                    method="POST">
+                                                    method="POST" onsubmit="return confirm('Delete product?')">
                                                     @csrf @method('DELETE')
                                                     <button class="text-red-500 hover:underline">Delete</button>
                                                 </form>
@@ -306,7 +332,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="block text-sm font-medium mb-1">Description</label>
-                                <input type="text" name="desc" required class="w-full border rounded-lg p-2">
+                                <input type="text" name="desc"  class="w-full border rounded-lg p-2">
                             </div>
                             <div class="mb-4 flex items-center">
                                 <input type="checkbox" name="highlighted" value="1" id="h-add" class="mr-2">
@@ -393,7 +419,11 @@
                             </div>
                             <div class="mb-4">
                                 <label class="block text-sm font-medium">Benefits</label>
-                                <textarea name="benefits" x-model="editProd.benefits" rows="2" class="w-full border rounded-lg p-2"></textarea>
+                                <textarea name="benefits" rows="2" class="w-full border rounded-lg p-2"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium">Button Text</label>
+                                <input type="text" name="button_text" class="w-full border rounded-lg p-2">
                             </div>
                             <div class="flex justify-end gap-2">
                                 <button type="button" @click="productModal = false"

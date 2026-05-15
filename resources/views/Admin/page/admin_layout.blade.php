@@ -42,9 +42,9 @@
             background: #475569;
         }
 
-        /* Smooth backdrop blur for sticky header */
+        /* Smooth backdrop blur */
         .glass-header {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
@@ -52,8 +52,8 @@
 </head>
 <body class="bg-[#f8fafc] font-sans text-slate-900 overflow-x-hidden">
 
-    <div class="min-h-screen lg:flex" x-data="{ sidebarOpen: false }">
-        
+    <div class="min-h-screen flex" x-data="{ sidebarOpen: false }">
+
         <!-- Mobile Sidebar Overlay -->
         <div
             x-show="sidebarOpen"
@@ -63,9 +63,9 @@
             @click="sidebarOpen = false">
         </div>
 
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation - FIXED -->
         <aside
-            class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-[#0f172a] text-slate-200 transition-transform duration-300 lg:static lg:translate-x-0 border-r border-slate-800"
+            class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-[#0f172a] text-slate-200 transition-transform duration-300 border-r border-slate-800"
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
             <!-- Brand Identity -->
@@ -112,7 +112,7 @@
                         class="group flex items-center gap-3 rounded-xl px-4 py-3 text-slate-400 transition-all duration-200 hover:bg-blue-600/10 hover:text-white
                         {{ request()->routeIs('admin.products.cms') || request()->routeIs('admin.product.*') ? 'bg-blue-600/15 text-blue-400 ring-1 ring-blue-500/30' : '' }}">
                         <i class="fa-solid fa-pills w-6 text-center text-lg transition-transform group-hover:scale-110"></i>
-                        <span class="font-semibold text-sm">Product Catalog</span>
+                        <span class="font-semibold text-sm">Product Page</span>
                         @if(request()->routeIs('admin.products.cms') || request()->routeIs('admin.product.*'))
                             <div class="ml-auto h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></div>
                         @endif
@@ -127,13 +127,7 @@
                         <span class="font-semibold text-sm">General Settings</span>
                     </a>
                     
-                    <form action="" method="POST" class="mt-4">
-                        @csrf
-                        <button type="submit" class="group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-red-400 transition-all hover:bg-red-500/10 hover:text-red-300">
-                            <i class="fa-solid fa-right-from-bracket w-6 text-center text-lg"></i>
-                            <span class="font-semibold text-sm">Logout Session</span>
-                        </button>
-                    </form>
+                    
                 </nav>
             </div>
 
@@ -157,7 +151,7 @@
         </aside>
 
         <!-- Main Workspace -->
-        <div class="flex min-w-0 flex-1 flex-col">
+        <div class="flex-1 flex flex-col lg:ml-72">
             
             <!-- Sticky Header -->
             <header class="sticky top-0 z-30 border-b border-slate-200 glass-header">
@@ -172,7 +166,7 @@
                                 <span class="hover:text-blue-600 cursor-pointer">EPHAC</span>
                                 <span class="mx-1 text-slate-300">/</span>
                                 <span class="text-slate-400 capitalize">
-                                    {{ str_replace('.', ' ', request()->route()->getName() ?? 'Dashboard') }}
+                                    {{ str_replace(['.', '-'], ' ', request()->route()->getName() ?? 'Dashboard') }}
                                 </span>
                             </nav>
                         </div>
