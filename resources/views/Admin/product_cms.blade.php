@@ -55,14 +55,14 @@
         @endif
 
         {{-- HERO SECTION MANAGEMENT --}}
-        <section id="hero" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <section id="hero" class="mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
                 <h3 class="text-lg font-bold text-gray-800">Hero Section Management</h3>
             </div>
 
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <form action="{{ route('admin.products.hero.update') }}" method="POST"
-                    class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     @csrf
 
                     <div class="md:col-span-2">
@@ -92,9 +92,9 @@
                             class="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $hero->description ?? '') }}</textarea>
                     </div>
 
-                    <div class="md:col-span-2 flex justify-end">
+                    <div class="flex justify-stretch md:col-span-2 md:justify-end">
                         <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition duration-200">
+                            class="w-full rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition duration-200 hover:bg-blue-700 md:w-auto">
                             Update Hero Section
                         </button>
                     </div>
@@ -102,28 +102,28 @@
             </div>
         </section>
 
-        <section id="catalog-management" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <section id="catalog-management" class="mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
                 <h3 class="text-lg font-bold text-gray-800">Product  Management</h3>
             </div>
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <div class="container mx-auto">
 
 
                     <!-- Tabs -->
-                    <div class="mb-6 flex flex-wrap gap-2 border-b pb-3">
+                    <div class="mb-6 flex flex-col gap-2 border-b pb-3 sm:flex-row sm:flex-wrap">
                         <button @click="tab = 'categories'"
                             :class="tab === 'categories' ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' :
                                 'text-gray-500 hover:text-gray-700'"
-                            class="rounded-lg px-4 py-2 font-semibold transition">Categories</button>
+                            class="rounded-lg px-4 py-2 text-left font-semibold transition sm:text-center">Categories</button>
                         <button @click="tab = 'subcategories'"
                             :class="tab === 'subcategories' ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' :
                                 'text-gray-500 hover:text-gray-700'"
-                            class="rounded-lg px-4 py-2 font-semibold transition">Subcategories</button>
+                            class="rounded-lg px-4 py-2 text-left font-semibold transition sm:text-center">Subcategories</button>
                         <button @click="tab = 'products'"
                             :class="tab === 'products' ? 'bg-blue-50 text-blue-600 ring-1 ring-blue-200' :
                                 'text-gray-500 hover:text-gray-700'"
-                            class="rounded-lg px-4 py-2 font-semibold transition">Products</button>
+                            class="rounded-lg px-4 py-2 text-left font-semibold transition sm:text-center">Products</button>
                     </div>
 
                     <!-- CATEGORIES TAB -->
@@ -131,11 +131,11 @@
                         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <h2 class="text-xl font-bold text-gray-700">Categories</h2>
                             <button @click="categoryModal = true"
-                                class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">Add
+                                class="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 sm:w-auto">Add
                                 Category</button>
                         </div>
-                        <div class="bg-white rounded shadow overflow-hidden">
-                            <table class="w-full text-left border-collapse">
+                        <div class="overflow-x-auto rounded shadow">
+                            <table class="min-w-[520px] w-full border-collapse text-left">
                                 <thead class="bg-gray-100 text-gray-600 uppercase text-sm">
                                     <tr>
                                         <th class="px-6 py-3">ID</th>
@@ -148,7 +148,8 @@
                                         <tr class="border-b hover:bg-gray-50 transition">
                                             <td class="px-6 py-4">{{ $cat->id }}</td>
                                             <td class="px-6 py-4 font-medium">{{ $cat->title }}</td>
-                                            <td class="px-6 py-4 text-right flex justify-end gap-3">
+                                            <td class="px-6 py-4">
+                                                <div class="flex flex-wrap justify-end gap-3 text-right">
                                                 <button
                                                     @click="editCat = {id: '{{ $cat->id }}', title: @js($cat->title)}; editCategoryModal = true"
                                                     class="text-blue-500 hover:underline">Edit</button>
@@ -157,6 +158,7 @@
                                                     @csrf @method('DELETE')
                                                     <button class="text-red-500 hover:underline">Delete</button>
                                                 </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -170,11 +172,11 @@
                         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <h2 class="text-xl font-bold text-gray-700">Subcategories</h2>
                             <button @click="subcategoryModal = true"
-                                class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">Add
+                                class="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 sm:w-auto">Add
                                 Subcategory</button>
                         </div>
-                        <div class="bg-white rounded shadow overflow-hidden">
-                            <table class="w-full text-left">
+                        <div class="overflow-x-auto rounded shadow">
+                            <table class="min-w-[760px] w-full text-left">
                                 <thead class="bg-gray-100 text-gray-600">
                                     <tr>
                                         <th class="px-6 py-3">Category</th>
@@ -196,7 +198,8 @@
                                                     {{ $sub->highlighted ? 'Yes' : 'No' }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 text-right flex justify-end gap-3">
+                                            <td class="px-6 py-4">
+                                                <div class="flex flex-wrap justify-end gap-3 text-right">
                                                 <button
                                                     @click="editSub = {id: '{{ $sub->id }}', catId: '{{ $sub->category_id }}', name: @js($sub->name), desc: @js($sub->desc), highlighted: {{ $sub->highlighted ? 'true' : 'false' }}}; editSubcategoryModal = true"
                                                     class="text-blue-500 hover:underline">Edit</button>
@@ -205,6 +208,7 @@
                                                     @csrf @method('DELETE')
                                                     <button class="text-red-500 hover:underline">Delete</button>
                                                 </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -218,11 +222,11 @@
                         <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <h2 class="text-xl font-bold text-gray-700">Products</h2>
                             <button @click="productModal = true"
-                                class="rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700">Add
+                                class="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700 sm:w-auto">Add
                                 Product</button>
                         </div>
-                        <div class="bg-white rounded shadow overflow-hidden">
-                            <table class="w-full text-left">
+                        <div class="overflow-x-auto rounded shadow">
+                            <table class="min-w-[640px] w-full text-left">
                                 <thead class="bg-gray-100 text-gray-600">
                                     <tr>
                                         <th class="px-6 py-3">Image</th>
@@ -241,7 +245,8 @@
                                             <td class="px-6 py-4 font-medium">{{ $prod->name }}</td>
                                             <td class="px-6 py-4 text-gray-500">{{ $prod->subcategory->name ?? 'N/A' }}
                                             </td>
-                                            <td class="px-6 py-4 text-right flex justify-end gap-3">
+                                            <td class="px-6 py-4">
+                                                <div class="flex flex-wrap justify-end gap-3 text-right">
                                                 <button
                                                     @click="editProd = {
                                     id: '{{ $prod->id }}', 
@@ -257,6 +262,7 @@
                                                     @csrf @method('DELETE')
                                                     <button class="text-red-500 hover:underline">Delete</button>
                                                 </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -271,7 +277,7 @@
                 <!-- Add Category Modal -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50" x-show="categoryModal"
                     x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6" @click.away="categoryModal = false">
+                    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl sm:p-6" @click.away="categoryModal = false">
                         <h3 class="text-xl font-bold mb-4">Add Category</h3>
                         <form action="{{ route('admin.product.category.store') }}" method="POST">
                             @csrf
@@ -292,7 +298,7 @@
                 <!-- Edit Category Modal -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50"
                     x-show="editCategoryModal" x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6"
+                    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl sm:p-6"
                         @click.away="editCategoryModal = false">
                         <h3 class="text-xl font-bold mb-4">Edit Category</h3>
                         <form :action="`/admin/products-cms/category/${editCat.id}`" method="POST">
@@ -314,7 +320,7 @@
                 <!-- Add Subcategory Modal -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50"
                     x-show="subcategoryModal" x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6" @click.away="subcategoryModal = false">
+                    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl sm:p-6" @click.away="subcategoryModal = false">
                         <h3 class="text-xl font-bold mb-4">Add Subcategory</h3>
                         <form action="{{ route('admin.product.subcategory.store') }}" method="POST">
                             @csrf
@@ -350,7 +356,7 @@
                 <!-- Edit Subcategory Modal -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50"
                     x-show="editSubcategoryModal" x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6"
+                    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl sm:p-6"
                         @click.away="editSubcategoryModal = false">
                         <h3 class="text-xl font-bold mb-4">Edit Subcategory</h3>
                         <form :action="`/admin/products-cms/subcategory/${editSub.id}`" method="POST">
@@ -390,12 +396,12 @@
                 <!-- Product Modal (Add/Edit logic combined) -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 overflow-y-auto"
                     x-show="productModal" x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8"
+                    <div class="my-8 w-full max-w-2xl rounded-xl bg-white p-5 shadow-xl sm:p-6"
                         @click.away="productModal = false">
                         <h3 class="text-xl font-bold mb-4">Add New Product</h3>
                         <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div>
                                     <label class="block text-sm font-medium">Subcategory</label>
                                     <select name="subcategory_id" class="w-full border rounded-lg p-2">
@@ -438,13 +444,13 @@
                 <!-- Edit Product Modal -->
                 <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 overflow-y-auto"
                     x-show="editProductModal" x-cloak x-transition>
-                    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8"
+                    <div class="my-8 w-full max-w-2xl rounded-xl bg-white p-5 shadow-xl sm:p-6"
                         @click.away="editProductModal = false">
                         <h3 class="text-xl font-bold mb-4">Edit Product</h3>
                         <form :action="`/admin/products-cms/product/${editProd.id}`" method="POST"
                             enctype="multipart/form-data">
                             @csrf @method('PUT')
-                            <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div>
                                     <label class="block text-sm font-medium">Subcategory</label>
                                     <select name="subcategory_id" x-model="editProd.subId"

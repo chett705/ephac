@@ -64,37 +64,65 @@
                 <section class="relative overflow-hidden rounded-[20px] bg-black h-[620px] lg:h-[720px] shadow-2xl">
                     <div class="absolute inset-0">
                         @if ($hero && $hero->video_url)
-                            @php $videoId = Str::afterLast($hero->video_url, '/'); @endphp
-                            <iframe width="100%" height="100%"
-                                src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0"
-                                frameborder="0" allowfullscreen class="scale-150"></iframe>
-                        @endif
-                        <div class="absolute inset-0 bg-black/40"></div>
-                    </div>
-                    <div class="relative z-20 flex items-center h-full px-8 lg:px-14">
-                        <div class="max-w-2xl text-white">
-                            <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
-                                EPHAC</h1>
-                            <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                                {{ optional($hero)->title ?? 'Trusted Manufacturer' }}</h2>
-                            <p class="mt-6 max-w-lg text-lg text-white/90">
-                                {{ optional($hero)->subtitle }}
-                                {{ optional($hero)->description }}
-                            </p>
+                            @php
+                                // Extracts the ID even if the URL has query parameters like ?si=...
+                                $urlPath = parse_url($hero->video_url, PHP_URL_PATH);
+                                $videoId = basename($urlPath);
 
+                                // Fallback for standard watch?v= format if the user pastes that instead
+                                if ($hero->video_url && str_contains($hero->video_url, 'watch?v=')) {
+                                    $videoId = Str::after($hero->video_url, 'v=');
+                                    $videoId = Str::before($videoId, '&');
+                                }
+                            @endphp
+
+                            <div class="w-full h-full pointer-events-none">
+                                <iframe width="100%" height="100%"
+                                    src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0&rel=0&showinfo=0&iv_load_policy=3"
+                                    frameborder="0" allow="autoplay; encrypted-media"
+                                    class="scale-[1.35] lg:scale-150 w-full h-full object-cover">
+                                </iframe>
+                            </div>
+                        @endif
+                        {{-- Dark Overlay to make text readable --}}
+                        <div class="absolute inset-0 bg-black/50"></div>
+                    </div>
+
+                    <div class="relative z-20 flex items-center h-full px-8 lg:px-14">
+                        <div class="max-w-3xl text-white">
+                            {{-- Main Title --}}
+                            <h1 class="text-6xl font-black uppercase tracking-tight text-[#e31e24] sm:text-7xl lg:text-8xl">
+                                {{ $hero->title ?? 'Trusted Manufacturer' }}
+                            </h1>
+
+                            {{-- Dynamic Subtitle (Heading) --}}
+                            <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                                 {{ $hero->subtitle }}
+                            </h2>
+
+                            {{-- Dynamic Subtitle & Description --}}
+                            <div class="mt-6 max-w-xl">
+                                <p class="text-xl font-semibold text-white">
+                                   
+                                </p>
+                                <p class="mt-2 text-lg text-white/80 leading-relaxed">
+                                    {{ $hero->description }}
+                                </p>    
+                            </div>
+
+                            {{-- Call to Action Buttons --}}
                             <div class="mt-10 flex flex-wrap gap-4">
-                                <a href="#contact"
-                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
+                                <a href="/contact"
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition-all duration-300 shadow-lg hover:scale-105">
                                     Contact Us
                                 </a>
 
                                 <a href="{{ route('Frontend.Pages.Product') }}#products-list"
-                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition">
+                                    class="rounded-full bg-[#1452db] px-10 py-3.5 text-sm font-bold text-white hover:bg-[#0f3a9e] transition-all duration-300 shadow-lg hover:scale-105">
                                     Explore Products
                                 </a>
                             </div>
                         </div>
-
                     </div>
                 </section>
 

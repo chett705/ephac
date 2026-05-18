@@ -38,7 +38,7 @@
         {{-- HERO SECTION --}}
         <section id="hero" class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
             <div class="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
-                <h3 class="text-lg font-bold text-gray-800">Company info</h3>
+                <h3 class="text-lg font-bold text-gray-800">Activity management</h3>
             </div>
             <div class="p-4 sm:p-6">
                 <form action="{{ route('admin.about.hero.update') }}" method="POST"

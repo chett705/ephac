@@ -87,20 +87,18 @@
                 {{-- Categories Grid --}}
                 <section id="products-list" class="py-24 px-6">
                     <div class="max-w-7xl mx-auto">
-                        <h2 class="text-4xl md:text-5xl text-center font-extrabold text-[#0a38a0] mb-20">Products</h2>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                        <h2 class="text-2xl md:text-3xl text-center font-extrabold text-[#0a38a0] mb-20">Products</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                             <template x-for="category in categories" :key="category.id">
                                 <div
-                                    class="flex flex-col bg-white/70 backdrop-blur-md rounded-[32px] border border-white/50 p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+                                    class="flex flex-col bg-white/70 backdrop-blur-md rounded-[32px] border border-white/50 p-4 shadow-xl hover:shadow-2xl transition-all duration-300">
                                     <h3 class="text-[#0a38a0] text-xl font-black mb-6 border-b border-blue-100 pb-4 h-14 overflow-hidden"
                                         x-text="category.title"></h3>
                                     <div class="flex flex-col gap-3">
                                         <template x-for="subcategory in category.subcategories" :key="subcategory.id">
                                             <button type="button" @click="openSubcategory(category, subcategory)"
-                                                class="transition-all text-[14px] font-bold text-left py-2 px-4 rounded-xl group"
-                                                :class="subcategory.highlighted ? 'bg-[#0a38a0] text-white' :
-                                                    'text-[#2d52a8] hover:bg-blue-50'">
-                                                <span x-text="subcategory.name"></span>
+                                                class="transition-all text-[11px] font-bold text-left py-2 px-4 rounded-xl group hover:bg-[#0a38a0] hover:text-white">
+                                                <span x-text="subcategory.name "></span>
                                             </button>
                                         </template>
                                     </div>
@@ -117,32 +115,33 @@
             x-transition:enter="transition ease-out duration-300">
             <div class="max-w-7xl mx-auto">
                 <button @click="backToCategories()"
-                    class="text-[#0a38a0] mb-12 flex items-center font-bold hover:gap-2 transition-all">
+                    class="text-[#0a38a0] mb-12 flex items-center font-bold  transition-all">
                     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                     Back to Categories
                 </button>
-                <h1 class="text-5xl font-black text-[#0a38a0] mb-2" x-text="selectedCategory?.title"></h1>
-                <h2 class="text-2xl font-bold text-gray-500 mb-6" x-text="selectedSubcategory?.name"></h2>
+                <h1 class="text-[50px] font-black text-[#0a38a0] mb-2" x-text="selectedCategory?.title"></h1>
+                <h2 class="text-[30px] font-bold text-gray-500 mb-6" x-text="selectedSubcategory?.name"></h2>
 
                 {{-- SUBCATEGORY DESCRIPTION FIXED --}}
                 <div class="max-w-4xl mb-12">
-                    <p class="text-xl text-gray-700 leading-relaxed"
+                    <p class="text-[20px] text-gray-700 leading-relaxed"
                         x-text="selectedSubcategory?.desc || 'Quality pharmaceutical solutions manufactured under strict standards.'">
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
                     <template x-for="product in selectedSubcategory?.products || []" :key="product.id">
                         <div class="bg-white rounded-[30px] p-6 shadow-lg hover:shadow-2xl transition-all group">
                             <div class="aspect-square bg-gray-100 rounded-[20px] mb-6 overflow-hidden">
                                 <img :src="product.image"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             </div>
-                            <h4 class="text-xl font-bold text-[#0a38a0] mb-6 h-14 line-clamp-2" x-text="product.name"></h4>
+                            <h4 class="text-[14px] font-bold text-[#0a38a0] mb-6 h-14 line-clamp-2" x-text="product.name"></h4>
                             <button @click="openProduct(product)"
-                                class="w-full py-4 rounded-full font-bold bg-[#0a38a0] text-white hover:bg-[#e31e24] transition-colors shadow-lg">View
+                                class="w-full py-2   rounded-full  bg-[#0a38a0] text-white hover:brightness-110 hover:scale-105 
+                            active:scale-95 transition-all  shadow-lg duration-300">View
                                 Details</button>
                         </div>
                     </template>
@@ -153,7 +152,7 @@
         {{-- View: Product Detail --}}
         <section x-show="view === 'product-detail'" class="py-24 px-6 min-h-screen bg-white"
             x-transition:enter="transition ease-out duration-300">
-            <div class="max-w-7xl mx-auto">
+            <div class="max-w-4xl mx-auto">
                 <button @click="backToSubcategory()"
                     class="text-[#0a38a0] mb-12 flex items-center font-bold hover:gap-2 transition-all">
                     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +162,7 @@
                 </button>
 
                 <div class="flex flex-col lg:flex-row gap-16 items-start">
-                    <div class="w-full lg:w-1/2 lg:sticky lg:top-32">
+                    <div class="w-full lg:w-1/3 lg:sticky lg:top-32">
                         <div
                             class="bg-gray-50 rounded-[40px] aspect-square shadow-2xl overflow-hidden border-8 border-white group">
                             <template x-if="selectedProduct?.image">
@@ -173,10 +172,10 @@
                         </div>
                     </div>
 
-                    <div class="w-full lg:w-1/2">
+                    <div class="w-full lg:w-2/3">
                         <span class="text-[#e31e24] font-black tracking-widest uppercase text-sm"
                             x-text="selectedSubcategory?.name"></span>
-                        <h3 class="text-5xl lg:text-7xl font-black text-[#0a38a0] mt-2 mb-8 leading-tight"
+                        <h3 class="text-2xl lg:text-3xl font-black text-[#0a38a0] mt-2 mb-8 leading-tight"
                             x-text="selectedProduct?.name"></h3>
 
                         <div class="prose prose-xl text-gray-600 mb-12 leading-relaxed">
@@ -186,15 +185,25 @@
                         <div class="space-y-6 mb-16" x-show="selectedProduct?.benefits.length">
 
                             <template x-for="(benefit, index) in selectedProduct?.benefits || []" :key="index">
-                                <div class="flex items-start gap-5 bg-blue-50/50 p-6 rounded-3xl border border-blue-100/50">
-                                    <div class="mt-1.5 w-4 h-4 bg-[#000000] rounded-full flex-shrink-0"></div>
-                                    <span class="font-bold text-lg text-[#0a38a0]" x-text="benefit"></span>
+                                <div class="flex items-start gap-5">
+
+                                    <!-- Bullet (thin line) -->
+                                    <div class="w-2 h-2 bg-[#000000] rounded-full flex-shrink-0 mt-1.5"></div>
+
+                                    <!-- Benefit Text -->
+                                    <span class="font-semibold text-[20px] leading-tight tracking-[-0.02em] text-[#000000   ]"
+                                        x-text="benefit">
+                                    </span>
+
                                 </div>
                             </template>
+
                         </div>
 
                         <button
-                            class="bg-[#0a38a0] text-white px-16 py-6 rounded-full font-black text-2xl shadow-2xl hover:bg-[#e31e24] transition-all transform active:scale-95">
+                            class="bg-gradient-to-r from-[#0A38A0] to-[#004EFF] text-white px-7 py-4 rounded-full font-black text-xl shadow-2xl 
+                            hover:brightness-110 hover:scale-105 
+                            active:scale-95 transition-all duration-300">
                             <span x-text="selectedProduct?.button_text"></span>
                         </button>
                     </div>

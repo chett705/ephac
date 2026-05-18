@@ -36,14 +36,13 @@ $bgFooter  = asset('storage/bgFooter.png');
             <div class="lg:col-span-3">
                 <h3 class="text-white font-bold text-lg mb-6">Information</h3>
                 <ul class="space-y-3 text-white/90">
-                    <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Products</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Manufacturing</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Services</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">News</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Insights</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+                    <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="/about-us" class="hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="/products" class="hover:text-white transition-colors">Products</a></li>
+                    <li><a href="/services" class="hover:text-white transition-colors">Services</a></li>
+                    <li><a href="/activites" class="hover:text-white transition-colors">Activites</a></li>
+                    <li><a href="/insight" class="hover:text-white transition-colors">Insights</a></li>
+                    <li><a href="/contact" class="hover:text-white transition-colors">Contact Us</a></li>
                 </ul>
             </div>
 
